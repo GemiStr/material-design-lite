@@ -1,0 +1,166 @@
+/**
+ * Copyright 2016 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import "mdl-animation/variables";
+@import "mdl-elevation/mixins";
+@import "mdl-theme/mixins";
+
+.mdl-temp-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  box-sizing: border-box;
+  contain: content;
+}
+
+/* Shaded background */
+.mdl-temp-drawer::before {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, .6);
+  content: "";
+  opacity: 0;
+  opacity: var(--mdl-temp-drawer-opacity, 0);
+  will-change: opacity;
+  box-sizing: border-box;
+}
+
+.mdl-temp-drawer__drawer {
+  display: flex;
+  position: absolute;
+  left: 0;
+  flex-direction: column;
+  width: calc(100% - 56px);
+  max-width: 280px;
+  height: 100%;
+  transform: translateX(calc(-100% - 20px));
+  will-change: transform;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  .mdl-temp-drawer--right & {
+    right: 0;
+    left: auto;
+    transform: translateX(calc(100% + 20px));
+  }
+
+  @include mdl-theme-prop(background, background);
+  @include mdl-elevation(16);
+
+  @include mdl-theme-dark(".mdl-temp-drawer") {
+    background: #303030;
+
+    @include mdl-theme-prop(color, text-primary-on-dark);
+  }
+}
+
+.mdl-temp-drawer--animating {
+  &::before {
+    transition: opacity .3s $mdl-animation-linear-out-slow-in-timing-function;
+  }
+
+  &.mdl-temp-drawer--open .mdl-temp-drawer__drawer {
+    transition: transform .33s $mdl-animation-linear-out-slow-in-timing-function;
+  }
+
+  .mdl-temp-drawer__drawer {
+    transition: transform .13s $mdl-animation-linear-out-slow-in-timing-function;
+  }
+}
+
+.mdl-temp-drawer--open {
+  pointer-events: auto;
+
+  &::before {
+    opacity: 1;
+    opacity: var(--mdl-temp-drawer-opacity, 1);
+  }
+
+  .mdl-temp-drawer__drawer {
+    transform: none;
+  }
+}
+
+/* Use aspect ratio trick to maintain 16:9 aspect ratio on the header */
+.mdl-temp-drawer__header {
+  position: relative;
+}
+
+.mdl-temp-drawer__header::before {
+  display: block;
+  padding-top: 9 / 16 * 100%;
+  content: "";
+}
+
+.mdl-temp-drawer__header-content {
+  display: flex;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  align-items: flex-end;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.mdl-temp-drawer__toolbar-spacer {
+  display: flex;
+  flex-shrink: 0;
+  align-items: flex-end;
+  height: 56px;
+  padding: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, .12);
+  box-sizing: border-box;
+
+  @include mdl-theme-dark(".mdl-temp-drawer") {
+    border-bottom: 1px solid rgba(255, 255, 255, .12);
+  }
+}
+
+.mdl-temp-drawer__content {
+  flex-grow: 1;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mdl-temp-drawer__footer {
+  @include mdl-elevation(2);
+  flex-shrink: 0;
+}
+
+/* TODO(sgomes): replace with global breakpoints when we have them */
+@media (min-width: 600px) {
+  .mdl-temp-drawer__drawer {
+    width: calc(100% - 64px);
+    max-width: 320px;
+  }
+
+  .mdl-temp-drawer__appbar-spacer {
+    height: 64px;
+  }
+}

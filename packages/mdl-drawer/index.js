@@ -14,25 +14,6 @@
  * limitations under the License.
  */
 
-import BaseComponent from 'mdl-base';
-import Checkbox from 'mdl-checkbox';
-import Radio from 'mdl-radio';
-import Ripple from 'mdl-ripple';
-import {MDLTempDrawer as TempDrawer} from 'mdl-drawer';
-import autoInit from 'mdl-auto-init';
+import MDLTempDrawer from './mdl-temp-drawer';
 
-console.info('Hello, MDL!!!');
-
-// Register all components
-autoInit.register('MDLCheckbox', Checkbox);
-autoInit.register('MDLTempDrawer', TempDrawer);
-
-// Export all components.
-export {
-  BaseComponent,
-  Checkbox,
-  Radio,
-  Ripple,
-  TempDrawer,
-  autoInit
-};
+export {MDLTempDrawer};
